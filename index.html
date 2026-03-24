@@ -22,76 +22,98 @@ nav {
   align-items: center;
 }
 
-nav h2 {
-  margin: 0;
+.menu-btn {
+  font-size: 24px;
+  cursor: pointer;
 }
 
-nav a {
+.menu {
+  display: none;
+  background: #0a3d62;
+  text-align: center;
+}
+
+.menu a {
+  display: block;
+  padding: 10px;
   color: white;
-  margin-left: 15px;
   text-decoration: none;
-  font-size: 14px;
+  border-top: 1px solid rgba(255,255,255,0.2);
 }
 
 /* HERO */
 .hero {
-  background: linear-gradient(rgba(10,61,98,0.8), rgba(10,61,98,0.8)),
+  background: linear-gradient(rgba(10,61,98,0.85), rgba(10,61,98,0.85)),
               url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d');
   background-size: cover;
   background-position: center;
   color: white;
   text-align: center;
-  padding: 80px 20px;
+  padding: 70px 20px;
 }
 
 .hero h1 {
-  font-size: 32px;
+  font-size: 26px;
+  margin-bottom: 10px;
 }
 
 .hero p {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 /* TRACK BOX */
 .track-box {
   background: white;
-  margin: -40px auto 20px;
+  margin: -30px auto 20px;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   text-align: center;
 }
 
 .track-box input {
-  padding: 12px;
+  padding: 14px;
   width: 90%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
   margin-bottom: 10px;
 }
 
 .track-box button {
-  padding: 12px;
+  padding: 14px;
   width: 95%;
   background: #e67e22;
   color: white;
   border: none;
-  cursor: pointer;
+  border-radius: 6px;
+  font-size: 16px;
 }
 
+/* RESULT CARD */
 .result {
   margin-top: 15px;
   font-size: 14px;
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
 }
 
 /* FEATURES */
 .features {
-  padding: 30px 15px;
+  padding: 25px 15px;
   text-align: center;
 }
 
 .feature {
-  margin: 20px 0;
+  background: white;
+  margin: 10px auto;
+  padding: 15px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 350px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.05);
 }
 
 /* FOOTER */
@@ -109,20 +131,22 @@ footer {
 <!-- NAV -->
 <nav>
   <h2>🌍 Global Express</h2>
-  <div>
-    <a href="#">Home</a>
-    <a href="#">Track</a>
-    <a href="#">Contact</a>
-  </div>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
 </nav>
+
+<div class="menu" id="menu">
+  <a href="#">Home</a>
+  <a href="#">Track</a>
+  <a href="#">Contact</a>
+</div>
 
 <!-- HERO -->
 <div class="hero">
-  <h1>Fast & Reliable Global Delivery</h1>
-  <p>Track your shipment anywhere in the world</p>
+  <h1>Fast & Reliable Delivery</h1>
+  <p>Track your shipment anywhere</p>
 </div>
 
-<!-- TRACKING -->
+<!-- TRACK -->
 <div class="track-box">
   <h3>Track Shipment</h3>
   <input id="track" placeholder="Enter Tracking Number">
@@ -137,23 +161,27 @@ footer {
   <div class="feature">🔒 Secure Handling</div>
 </div>
 
-<!-- FOOTER -->
 <footer>
   © 2026 Global Express Courier
 </footer>
 
 <script>
+function toggleMenu() {
+  let menu = document.getElementById("menu");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
 function check() {
   let num = document.getElementById("track").value;
   let data = JSON.parse(localStorage.getItem("shipments")) || {};
 
   if (data[num]) {
     document.getElementById("result").innerHTML =
-      "📦 " + data[num].status + "<br>" +
-      "📍 " + data[num].location + "<br>" +
-      "⏳ " + data[num].eta;
+      "📦 <b>Status:</b> " + data[num].status + "<br>" +
+      "📍 <b>Location:</b> " + data[num].location + "<br>" +
+      "⏳ <b>ETA:</b> " + data[num].eta;
   } else {
-    document.getElementById("result").innerHTML = "❌ Not Found";
+    document.getElementById("result").innerHTML = "❌ Tracking not found";
   }
 }
 </script>
