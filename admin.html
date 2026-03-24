@@ -45,24 +45,44 @@
 <p id="msg"></p>
 
 <script>
-function save() {
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  
+const firebaseConfig = {
+  apiKey: "AIzaSyCz_XWEQ5kFL7zgvSAbQkMUsm_re4ATL1A",
+  authDomain: "webdev-8e14f.firebaseapp.com",
+  projectId: "webdev-8e14f",
+  storageBucket: "webdev-8e14f.firebasestorage.app",
+  messagingSenderId: "1090232821373",
+  appId: "1:1090232821373:web:0ac793739c5e45990c7314",
+  measurementId: "G-VYGTQ62TGQ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+window.login = async function() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  await signInWithEmailAndPassword(auth, email, password);
+  document.getElementById("panel").style.display = "block";
+};
+
+window.save = async function() {
   let num = document.getElementById("num").value;
-  let status = document.getElementById("status").value;
-  let location = document.getElementById("location").value;
-  let eta = document.getElementById("eta").value;
 
-  let data = JSON.parse(localStorage.getItem("shipments")) || {};
+  await setDoc(doc(db, "shipments", num), {
+    status: document.getElementById("status").value,
+    location: document.getElementById("location").value,
+    eta: document.getElementById("eta").value
+  });
 
-  data[num] = {
-    status: status,
-    location: location,
-    eta: eta
-  };
-
-  localStorage.setItem("shipments", JSON.stringify(data));
-
-  document.getElementById("msg").innerHTML = "✅ Shipment Saved!";
-}
+  alert("Saved!");
+};
 </script>
 
 </body>
