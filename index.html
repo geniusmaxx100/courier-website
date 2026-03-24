@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Global Express Courier</title>
+
   <style>
     body {
       margin: 0;
@@ -16,43 +17,38 @@
       color: white;
       padding: 15px;
       text-align: center;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: bold;
     }
 
     .hero {
-  padding: 50px 15px;
-}
+      padding: 50px 15px;
+      text-align: center;
     }
 
-    .hero h1 {
+    h1 {
       font-size: 28px;
     }
 
-    .track-box {
-      margin-top: 20px;
+    input {
+      padding: 12px;
+      width: 90%;
+      max-width: 300px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
-<style>
-input {
-  padding: 12px;
-  width: 90%;
-  max-width: 300px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-button {
-  padding: 12px;
-  width: 95%;
-  max-width: 320px;
-  margin-top: 10px;
-  background: #e67e22;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}
-</style>
+    button {
+      padding: 12px;
+      width: 95%;
+      max-width: 320px;
+      margin-top: 10px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
     .result {
       margin-top: 20px;
@@ -62,6 +58,8 @@ button {
       padding: 15px;
       border-radius: 8px;
       color: black;
+      width: 90%;
+      max-width: 350px;
     }
 
     footer {
@@ -70,9 +68,11 @@ button {
       color: white;
       text-align: center;
       padding: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -82,10 +82,9 @@ button {
 <div class="hero">
   <h1>Track Your Shipment</h1>
 
-  <div class="track-box">
-    <input id="track" placeholder="Enter Tracking Number">
-    <button onclick="check()">Track</button>
-  </div>
+  <input id="track" placeholder="Enter Tracking Number">
+  <br>
+  <button onclick="check()">Track</button>
 
   <div class="result" id="result"></div>
 </div>
@@ -97,7 +96,6 @@ button {
 <script>
 function check() {
   let num = document.getElementById("track").value;
-
   let data = JSON.parse(localStorage.getItem("shipments")) || {};
 
   if (data[num]) {
