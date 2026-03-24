@@ -1,39 +1,69 @@
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCz_XWEQ5kFL7zgvSAbQkMUsm_re4ATL1A",
-  authDomain: "webdev-8e14f.firebaseapp.com",
-  projectId: "webdev-8e14f",
-  storageBucket: "webdev-8e14f.firebasestorage.app",
-  messagingSenderId: "1090232821373",
-  appId: "1:1090232821373:web:0ac793739c5e45990c7314",
-  measurementId: "G-VYGTQ62TGQ"
-};
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 20px;
+      background: #f4f6f9;
+    }
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+    input {
+      padding: 10px;
+      width: 90%;
+      max-width: 300px;
+      margin: 5px;
+    }
 
-window.login = async function() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
+    button {
+      padding: 10px;
+      width: 95%;
+      max-width: 320px;
+      background: green;
+      color: white;
+      border: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
 
-  await signInWithEmailAndPassword(auth, email, password);
-  document.getElementById("panel").style.display = "block";
-};
+<body>
 
-window.save = async function() {
+<h2>Admin Panel</h2>
+
+<input id="num" placeholder="Tracking Number"><br>
+<input id="status" placeholder="Status (e.g. In Transit)"><br>
+<input id="location" placeholder="Current Location"><br>
+<input id="eta" placeholder="Estimated Delivery"><br>
+
+<button onclick="save()">Save Shipment</button>
+
+<p id="msg"></p>
+
+<script>
+function save() {
   let num = document.getElementById("num").value;
+  let status = document.getElementById("status").value;
+  let location = document.getElementById("location").value;
+  let eta = document.getElementById("eta").value;
 
-  await setDoc(doc(db, "shipments", num), {
-    status: document.getElementById("status").value,
-    location: document.getElementById("location").value,
-    eta: document.getElementById("eta").value
-  });
+  let data = JSON.parse(localStorage.getItem("shipments")) || {};
 
-  alert("Saved!");
-};
+  data[num] = {
+    status: status,
+    location: location,
+    eta: eta
+  };
+
+  localStorage.setItem("shipments", JSON.stringify(data));
+
+  document.getElementById("msg").innerHTML = "✅ Shipment Saved!";
+}
 </script>
+
+</body>
+</html>
