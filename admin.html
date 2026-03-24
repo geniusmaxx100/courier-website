@@ -1,89 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Admin Dashboard</title>
-  <style>
-    body {
-      font-family: Arial;
-      padding: 20px;
-      background: #f4f6f9;
-    }
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    h1 {
-      text-align: center;
-    }
+const firebaseConfig = {
+  /* PASTE CONFIG HERE */
+};
 
-    input, select {
-      padding: 10px;
-      margin: 5px;
-      width: 200px;
-    }
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-    button {
-      padding: 10px 20px;
-      background: green;
-      color: white;
-      border: none;
-    }
+window.login = async function() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
 
-    .list {
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
+  await signInWithEmailAndPassword(auth, email, password);
+  document.getElementById("panel").style.display = "block";
+};
 
-<h1>📦 Admin Dashboard</h1>
+window.save = async function() {
+  let num = document.getElementById("num").value;
 
-<input id="tracking" placeholder="Tracking Number"><br>
-<input id="location" placeholder="Location"><br>
+  await setDoc(doc(db, "shipments", num), {
+    status: document.getElementById("status").value,
+    location: document.getElementById("location").value,
+    eta: document.getElementById("eta").value
+  });
 
-<select id="status">
-  <option>In Transit</option>
-  <option>Delivered</option>
-  <option>Pending</option>
-</select><br>
-
-<input id="eta" placeholder="ETA"><br>
-
-<button onclick="addShipment()">Add Shipment</button>
-
-<div class="list" id="list"></div>
-
-<script>
-function addShipment() {
-  let tracking = document.getElementById("tracking").value;
-  let location = document.getElementById("location").value;
-  let status = document.getElementById("status").value;
-  let eta = document.getElementById("eta").value;
-
-  let shipments = JSON.parse(localStorage.getItem("shipments")) || {};
-
-  shipments[tracking] = {
-    location: location,
-    status: status,
-    eta: eta
-  };
-
-  localStorage.setItem("shipments", JSON.stringify(shipments));
-
-  alert("Shipment Added!");
-  displayShipments();
-}
-
-function displayShipments() {
-  let shipments = JSON.parse(localStorage.getItem("shipments")) || {};
-  let output = "";
-
-  for (let key in shipments) {
-    output += `<p><b>${key}</b> - ${shipments[key].status} (${shipments[key].location})</p>`;
-  }
-
-  document.getElementById("list").innerHTML = output;
-}
-
-displayShipments();
+  alert("Saved!");
+};
 </script>
-
-</body>
-</html>
