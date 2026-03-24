@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Global Express Courier</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
+
+    header {
+      background: #0a3d62;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .hero {
+      background: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d');
+      background-size: cover;
+      background-position: center;
+      padding: 100px 20px;
+      text-align: center;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 40px;
+    }
+
+    .track-box {
+      margin-top: 20px;
+    }
+
+    input {
+      padding: 12px;
+      width: 250px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 12px 20px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      background: white;
+      display: inline-block;
+      padding: 15px;
+      border-radius: 8px;
+      color: black;
+    }
+
+    footer {
+      margin-top: 50px;
+      background: #0a3d62;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  🌍 Global Express Courier
+</header>
+
+<div class="hero">
+  <h1>Track Your Shipment</h1>
+
+  <div class="track-box">
+    <input id="track" placeholder="Enter Tracking Number">
+    <button onclick="check()">Track</button>
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<footer>
+  © 2026 Global Express Courier
+</footer>
+
+<script>
+function check() {
+  let num = document.getElementById("track").value;
+
+  let data = JSON.parse(localStorage.getItem("shipments")) || {};
+
+  if (data[num]) {
+    document.getElementById("result").innerHTML =
+      "📦 Status: " + data[num].status + "<br>" +
+      "📍 Location: " + data[num].location + "<br>" +
+      "⏳ ETA: " + data[num].eta;
+  } else {
+    document.getElementById("result").innerHTML = "❌ Tracking number not found";
+  }
+}
+</script>
+
+</body>
+</html>
