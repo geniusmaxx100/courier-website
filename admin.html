@@ -1,89 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Dashboard</title>
-  <style>
-    body {
-      font-family: Arial;
-      padding: 20px;
-      background: #f4f6f9;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    input, select {
-      padding: 10px;
-      margin: 5px;
-      width: 200px;
-    }
-
-    button {
-      padding: 10px 20px;
-      background: green;
-      color: white;
-      border: none;
-    }
-
-    .list {
-      margin-top: 20px;
-    }
-  </style>
+<title>Admin Dashboard</title>
 </head>
+
 <body>
 
-<h1>📦 Admin Dashboard</h1>
+<h2>📦 Admin Dashboard</h2>
 
-<input id="tracking" placeholder="Tracking Number"><br>
-<input id="location" placeholder="Location"><br>
-
-<select id="status">
-  <option>In Transit</option>
-  <option>Delivered</option>
-  <option>Pending</option>
-</select><br>
-
-<input id="eta" placeholder="ETA"><br>
-
-<button onclick="addShipment()">Add Shipment</button>
-
-<div class="list" id="list"></div>
-
-<script>
-function addShipment() {
-  let tracking = document.getElementById("tracking").value;
-  let location = document.getElementById("location").value;
-  let status = document.getElementById("status").value;
-  let eta = document.getElementById("eta").value;
-
-  let shipments = JSON.parse(localStorage.getItem("shipments")) || {};
-
-  shipments[tracking] = {
-    location: location,
-    status: status,
-    eta: eta
-  };
-
-  localStorage.setItem("shipments", JSON.stringify(shipments));
-
-  alert("Shipment Added!");
-  displayShipments();
-}
-
-function displayShipments() {
-  let shipments = JSON.parse(localStorage.getItem("shipments")) || {};
-  let output = "";
-
-  for (let key in shipments) {
-    output += `<p><b>${key}</b> - ${shipments[key].status} (${shipments[key].location})</p>`;
-  }
-
-  document.getElementById("list").innerHTML = output;
-}
-
-displayShipments();
-</script>
+<p>You are logged in!</p>
 
 </body>
 </html>
