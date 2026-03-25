@@ -1,61 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GlobalCourier</title>
+  <meta charset="UTF-8">
+  <title>Global Express Courier</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
+
+    header {
+      background: #0a3d62;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .hero {
+  padding: 50px 15px;
+}
+    }
+
+    .hero h1 {
+      font-size: 28px;
+    }
+
+    .track-box {
+      margin-top: 20px;
+    }
 
 <style>
-body { font-family: Arial; text-align: center; background:#f4f6f9; }
-input, button { padding:12px; width:90%; max-width:300px; margin:5px; }
-button { background:#e67e22; color:white; border:none; }
-.result { margin-top:15px; }
-</style>
-</head>
+input {
+  padding: 12px;
+  width: 90%;
+  max-width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
 
+button {
+  padding: 12px;
+  width: 95%;
+  max-width: 320px;
+  margin-top: 10px;
+  background: #e67e22;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+</style>
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      background: white;
+      display: inline-block;
+      padding: 15px;
+      border-radius: 8px;
+      color: black;
+    }
+
+    footer {
+      margin-top: 50px;
+      background: #0a3d62;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+  </style>
+</head>
 <body>
 
-<h2> Globalcourier</h2>
-<h3>Track Shipment</h3>
+<header>
+  🌍 Global Express Courier
+</header>
 
-<input id="track" placeholder="Enter Tracking Number">
-<button onclick="check()">Track</button>
+<div class="hero">
+  <h1>Track Your Shipment</h1>
 
-<div class="result" id="result"></div>
+  <div class="track-box">
+    <input id="track" placeholder="Enter Tracking Number">
+    <button onclick="check()">Track</button>
+  </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <div class="result" id="result"></div>
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBW0uYIwI_z2ihj2LtdmgXNV4B5dOf3TDk",
-  authDomain: "globalcourier-3ba34.firebaseapp.com",
-  projectId: "globalcourier-3ba34",
-  storageBucket: "globalcourier-3ba34.firebasestorage.app",
-  messagingSenderId: "827988291885",
-  appId: "1:827988291885:web:daa65d034e3773a57c63a4"
-};
+<footer>
+  © 2026 Global Express Courier
+</footer>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.check = async function() {
+<script>
+function check() {
   let num = document.getElementById("track").value;
 
-  const ref = doc(db, "shipments", num);
-  const snap = await getDoc(ref);
+  let data = JSON.parse(localStorage.getItem("shipments")) || {};
 
-  if (snap.exists()) {
-    let data = snap.data();
+  if (data[num]) {
     document.getElementById("result").innerHTML =
-      "📦 Status: " + data.status + "<br>" +
-      "📍 Location: " + data.location + "<br>" +
-      "⏳ ETA: " + data.eta;
-      " ship id " + data.code+ "<br>" 
+      "📦 Status: " + data[num].status + "<br>" +
+      "📍 Location: " + data[num].location + "<br>" +
+      "⏳ ETA: " + data[num].eta;
   } else {
-    document.getElementById("result").innerHTML = "❌ Not Found";
+    document.getElementById("result").innerHTML = "❌ Tracking number not found";
   }
-};
+}
 </script>
 
 </body>
