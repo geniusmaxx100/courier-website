@@ -3,7 +3,66 @@
 <head>
 <title>Admin Dashboard</title>
 </head>
+ <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 20px;
+      background: #f4f6f9;
+    }
 
+    input {
+      padding: 10px;
+      width: 90%;
+      max-width: 300px;
+      margin: 5px;
+    }
+
+    button {
+      padding: 10px;
+      width: 95%;
+      max-width: 320px;
+      background: green;
+      color: white;
+      border: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Admin Panel</h2>
+
+<input id="num" placeholder="Tracking Number"><br>
+<input id="status" placeholder="Status (e.g. In Transit)"><br>
+<input id="location" placeholder="Current Location"><br>
+<input id="eta" placeholder="Estimated Delivery"><br>
+
+<button onclick="save()">Save Shipment</button>
+
+<p id="msg"></p>
+
+<script>
+function save() {
+  let num = document.getElementById("num").value;
+  let status = document.getElementById("status").value;
+  let location = document.getElementById("location").value;
+  let eta = document.getElementById("eta").value;
+
+  let data = JSON.parse(localStorage.getItem("shipments")) || {};
+
+  data[num] = {
+    status: status,
+    location: location,
+    eta: eta
+  };
+
+  localStorage.setItem("shipments", JSON.stringify(data));
+
+  document.getElementById("msg").innerHTML = "✅ Shipment Saved!";
+}
+</script>
 <body>
 
 <h2>📦 Admin Dashboard</h2>
