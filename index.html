@@ -1,164 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Global Express Courier</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Express Courier</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
 
-/* NAVBAR */
-nav {
-  background: #0a3d62;
-  color: white;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    header {
+      background: #0a3d62;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
 
-.menu-btn {
-  font-size: 24px;
-  cursor: pointer;
-}
+    .hero {
+      padding: 50px 15px;
+      text-align: center;
+    }
 
-.menu {
-  display: none;
-  background: #0a3d62;
-  text-align: center;
-}
+    h1 {
+      font-size: 28px;
+    }
 
-.menu a {
-  display: block;
-  padding: 10px;
-  color: white;
-  text-decoration: none;
-  border-top: 1px solid rgba(255,255,255,0.2);
-}
+    input {
+      padding: 12px;
+      width: 90%;
+      max-width: 300px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
 
-/* HERO */
-.hero {
-  background: linear-gradient(rgba(10,61,98,0.85), rgba(10,61,98,0.85)),
-              url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d');
-  background-size: cover;
-  background-position: center;
-  color: white;
-  text-align: center;
-  padding: 70px 20px;
-}
+    button {
+      padding: 12px;
+      width: 95%;
+      max-width: 320px;
+      margin-top: 10px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-.hero h1 {
-  font-size: 26px;
-  margin-bottom: 10px;
-}
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      background: white;
+      display: inline-block;
+      padding: 15px;
+      border-radius: 8px;
+      color: black;
+      width: 90%;
+      max-width: 350px;
+    }
 
-.hero p {
-  font-size: 15px;
-}
-
-/* TRACK BOX */
-.track-box {
-  background: white;
-  margin: -30px auto 20px;
-  padding: 20px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-.track-box input {
-  padding: 14px;
-  width: 90%;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-}
-
-.track-box button {
-  padding: 14px;
-  width: 95%;
-  background: #e67e22;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-/* RESULT CARD */
-.result {
-  margin-top: 15px;
-  font-size: 14px;
-  background: #f9f9f9;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-/* FEATURES */
-.features {
-  padding: 25px 15px;
-  text-align: center;
-}
-
-.feature {
-  background: white;
-  margin: 10px auto;
-  padding: 15px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 350px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-}
-
-/* FOOTER */
-footer {
-  background: #0a3d62;
-  color: white;
-  text-align: center;
-  padding: 15px;
-}
-</style>
+    footer {
+      margin-top: 50px;
+      background: #0a3d62;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- NAV -->
-<nav>
-  <h2>🌍 Global Express</h2>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
-</nav>
+<header>
+  🌍 Global Express Courier
+</header>
 
-<div class="menu" id="menu">
-  <a href="#">Home</a>
-  <a href="#">Track</a>
-  <a href="#">Contact</a>
-</div>
-
-<!-- HERO -->
 <div class="hero">
-  <h1>Fast & Reliable Delivery</h1>
-  <p>Track your shipment anywhere</p>
-</div>
+  <h1>Track Your Shipment</h1>
 
-<!-- TRACK -->
-<div class="track-box">
-  <h3>Track Shipment</h3>
   <input id="track" placeholder="Enter Tracking Number">
+  <br>
   <button onclick="check()">Track</button>
-  <div class="result" id="result"></div>
-</div>
 
-<!-- FEATURES -->
-<div class="features">
-  <div class="feature">🚚 Worldwide Delivery</div>
-  <div class="feature">⚡ Fast Shipping</div>
-  <div class="feature">🔒 Secure Handling</div>
+  <div class="result" id="result"></div>
 </div>
 
 <footer>
@@ -166,22 +94,18 @@ footer {
 </footer>
 
 <script>
-function track() {
+function check() {
   let num = document.getElementById("track").value;
+  let data = JSON.parse(localStorage.getItem("shipments")) || {};
 
-  let data = localStorage.getItem(num);
-
-  if (data) {
-    let obj = JSON.parse(data);
-
+  if (data[num]) {
     document.getElementById("result").innerHTML =
-      "📦 " + obj.status + "<br>📍 " + obj.location;
+      "📦 Status: " + data[num].status + "<br>" +
+      "📍 Location: " + data[num].location + "<br>" +
+      "⏳ ETA: " + data[num].eta;
   } else {
-    document.getElementById("result").innerHTML =
-      "❌ Not Found";
+    document.getElementById("result").innerHTML = "❌ Tracking number not found";
   }
-}
-</script>
 }
 </script>
 
