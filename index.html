@@ -166,23 +166,22 @@ footer {
 </footer>
 
 <script>
-function toggleMenu() {
-  let menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
-
-function check() {
+function track() {
   let num = document.getElementById("track").value;
-  let data = JSON.parse(localStorage.getItem("shipments")) || {};
 
-  if (data[num]) {
+  let data = localStorage.getItem(num);
+
+  if (data) {
+    let obj = JSON.parse(data);
+
     document.getElementById("result").innerHTML =
-      "📦 <b>Status:</b> " + data[num].status + "<br>" +
-      "📍 <b>Location:</b> " + data[num].location + "<br>" +
-      "⏳ <b>ETA:</b> " + data[num].eta;
+      "📦 " + obj.status + "<br>📍 " + obj.location;
   } else {
-    document.getElementById("result").innerHTML = "❌ Tracking not found";
+    document.getElementById("result").innerHTML =
+      "❌ Not Found";
   }
+}
+</script>
 }
 </script>
 
