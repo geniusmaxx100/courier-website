@@ -29,18 +29,31 @@ input, button {
 
 <button onclick="login()">Login</button>
 
-<script>
-function login() {
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBW0uYIwI_z2ihj2LtdmgXNV4B5dOf3TDk",
+  authDomain: "globalcourier-3ba34.firebaseapp.com",
+  projectId: "globalcourier-3ba34",
+  appId: "1:827988291885:web:daa65d034e3773a57c63a4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.login = async function() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
-  // CHANGE THESE TO YOUR OWN
-  if (email === "graceboorofficials@gmail.com" && password === "2102") {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
     window.location.href = "admin.html";
-  } else {
+  } catch (e) {
     alert("Wrong login details");
   }
-}
+};
 </script>
 
 </body>
