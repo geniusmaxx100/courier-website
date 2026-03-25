@@ -6,22 +6,71 @@
 <title>Global Express Courier</title>
 
 <style>
-body { font-family: Arial; text-align: center; background:#f4f6f9; }
-input, button { padding:12px; width:90%; max-width:300px; margin:5px; }
-button { background:#e67e22; color:white; border:none; }
-.result { margin-top:15px; }
+body { margin:0; font-family:Arial; background:#f4f6f9; }
+
+/* NAV */
+nav {
+  background:#0a3d62;
+  color:white;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+}
+
+/* HERO */
+.hero {
+  background:#0a3d62;
+  color:white;
+  text-align:center;
+  padding:60px 20px;
+}
+
+/* TRACK BOX */
+.track-box {
+  background:white;
+  margin:-30px auto;
+  padding:20px;
+  border-radius:10px;
+  width:90%;
+  max-width:400px;
+  text-align:center;
+}
+
+input, button {
+  padding:12px;
+  width:90%;
+  margin:5px;
+}
+
+button {
+  background:#e67e22;
+  color:white;
+  border:none;
+}
+
+.result {
+  margin-top:15px;
+  background:#f9f9f9;
+  padding:10px;
+}
 </style>
 </head>
 
 <body>
 
-<h2>🌍 Global Express Courier</h2>
-<h3>Track Shipment</h3>
+<nav>
+  <h3>🌍 Global Express</h3>
+</nav>
 
-<input id="track" placeholder="Enter Tracking Number">
-<button onclick="check()">Track</button>
+<div class="hero">
+  <h1>Track Your Shipment</h1>
+</div>
 
-<div class="result" id="result"></div>
+<div class="track-box">
+  <input id="track" placeholder="Enter Tracking Number">
+  <button onclick="check()">Track</button>
+  <div class="result" id="result"></div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -48,9 +97,9 @@ window.check = async function() {
   if (snap.exists()) {
     let data = snap.data();
     document.getElementById("result").innerHTML =
-      "📦 Status: " + data.status + "<br>" +
-      "📍 Location: " + data.location + "<br>" +
-      "⏳ ETA: " + data.eta;
+      "📦 " + data.status + "<br>" +
+      "📍 " + data.location + "<br>" +
+      "⏳ " + data.eta;
   } else {
     document.getElementById("result").innerHTML = "❌ Not Found";
   }
