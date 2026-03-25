@@ -3,94 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GlobalCourier</title>
+<title>Global Express Courier</title>
 
 <style>
-body { margin:0; font-family:Arial; background:#f4f6f9; }
-
-/* NAV */
-nav {
-  background:#0a3d62;
-  color:white;
-  padding:15px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-/* HERO */
-.hero {
-  background:#0a3d62;
-  color:white;
-  text-align:center;
-  padding:60px 20px;
-}
-
-/* TRACK BOX */
-.track-box {
-  background:white;
-  margin:-30px auto;
-  padding:20px;
-  border-radius:12px;
-  width:90%;
-  max-width:400px;
-  text-align:center;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-input, button {
-  padding:12px;
-  width:90%;
-  margin:5px;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-
-button {
-  background:#e67e22;
-  color:white;
-  border:none;
-  cursor:pointer;
-}
-
-/* TIMELINE */
-.timeline {
-  margin-top:20px;
-  text-align:left;
-}
-
-.step {
-  padding:10px;
-  border-left:4px solid #ccc;
-  margin-bottom:10px;
-}
-
-.active {
-  border-color:green;
-}
+body { font-family: Arial; text-align: center; background:#f4f6f9; }
+input, button { padding:12px; width:90%; max-width:300px; margin:5px; }
+button { background:#e67e22; color:white; border:none; }
+.result { margin-top:15px; }
 </style>
 </head>
 
 <body>
 
-<nav>
-  <div class="logo">
-    <img src="https://cdn-icons-png.flaticon.com/512/1048/1048315.png">
-    <h3>GlobalCourier</h3>
-  </div>
-</nav>
+<h2>🌍 Global Express Courier</h2>
+<h3>Track Shipment</h3>
 
-<div class="hero">
-  <h1>Track Your Shipment Worldwide</h1>
-</div>
+<input id="track" placeholder="Enter Tracking Number">
+<button onclick="check()">Track</button>
 
-<div class="track-box">
-  <input id="track" placeholder="Enter Tracking Number">
-  <button onclick="track()">Track</button>
-
-  <div id="result"></div>
-  <div class="timeline" id="timeline"></div>
-</div>
+<div class="result" id="result"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -108,30 +39,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.track = async function() {
+window.check = async function() {
   let num = document.getElementById("track").value;
+
   const ref = doc(db, "shipments", num);
   const snap = await getDoc(ref);
 
   if (snap.exists()) {
     let data = snap.data();
-
     document.getElementById("result").innerHTML =
-      "📦 " + data.status + "<br>📍 " + data.location;
-
-    // TIMELINE
-    let steps = ["Order Received", "In Transit", "Arrived at Hub", "Out for Delivery", "Delivered"];
-    let html = "";
-
-    steps.forEach((step, index) => {
-      let active = index <= data.step ? "step active" : "step";
-      html += `<div class="${active}">${step}</div>`;
-    });
-
-    document.getElementById("timeline").innerHTML = html;
-
+      "📦 Status: " + data.status + "<br>" +
+      "📍 Location: " + data.location + "<br>" +
+      "⏳ ETA: " + data.eta;
   } else {
-    document.getElementById("result").innerHTML = "❌ Tracking Number Not Found";
+    document.getElementById("result").innerHTML = "❌ Not Found";
   }
 };
 </script>
