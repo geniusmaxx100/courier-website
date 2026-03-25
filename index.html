@@ -93,20 +93,36 @@
   © 2026 Global Express Courier
 </footer>
 
-<script>
-function check() {
-  let num = document.getElementById("track").value;
-  let data = JSON.parse(localStorage.getItem("shipments")) || {};
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  if (data[num]) {
+const firebaseConfig = {
+  apiKey: "AIzaSyBW0uYIwI_z2ihj2LtdmgXNV4B5dOf3TDk",
+  authDomain: "globalcourier-3ba34.firebaseapp.com",
+  projectId: "globalcourier-3ba34",
+  appId: "1:827988291885:web:daa65d034e3773a57c63a4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.track = async function() {
+  let num = document.getElementById("track").value;
+
+  const ref = doc(db, "shipments", num);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    let data = snap.data();
+
     document.getElementById("result").innerHTML =
-      "📦 Status: " + data[num].status + "<br>" +
-      "📍 Location: " + data[num].location + "<br>" +
-      "⏳ ETA: " + data[num].eta;
+      "📦 " + data.status + "<br>📍 " + data.location;
   } else {
-    document.getElementById("result").innerHTML = "❌ Tracking number not found";
+    document.getElementById("result").innerHTML =
+      "❌ Not Found";
   }
-}
+};
 </script>
 
 </body>
