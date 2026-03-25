@@ -46,7 +46,7 @@ window.login = async function() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
-  await signInWithEmailAndPassword(auth, email, password);
+await signInWithEmailAndPassword(auth, email, password);
 window.location.href = "admin.html#dashboard";
 };
 
