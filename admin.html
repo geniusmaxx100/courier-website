@@ -1,53 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Dashboard</title>
-</head>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #f4f6f9;
+    }
 
+    h1 {
+      text-align: center;
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 5px;
+      width: 200px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: green;
+      color: white;
+      border: none;
+    }
+
+    .list {
+      margin-top: 20px;
+    }
+  </style>
+</head>
 <body>
 
-<h2>Admin Dashboard</h2>
+<h1>📦 Admin Dashboard</h1>
 
-<input id="id" placeholder="Tracking Number"><br>
-<input id="status" placeholder="Status"><br>
+<input id="tracking" placeholder="Tracking Number"><br>
 <input id="location" placeholder="Location"><br>
 
-<select id="step">
-<option value="0">Order Received</option>
-<option value="1">In Transit</option>
-<option value="2">Arrived at Hub</option>
-<option value="3">Out for Delivery</option>
-<option value="4">Delivered</option>
+<select id="status">
+  <option>In Transit</option>
+  <option>Delivered</option>
+  <option>Pending</option>
 </select><br>
 
-<button onclick="save()">Save Shipment</button>
+<input id="eta" placeholder="ETA"><br>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<button onclick="addShipment()">Add Shipment</button>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBW0uYIwI_z2ihj2LtdmgXNV4B5dOf3TDk",
-  authDomain: "globalcourier-3ba34.firebaseapp.com",
-  projectId: "globalcourier-3ba34",
-  appId: "1:827988291885:web:daa65d034e3773a57c63a4"
-};
+<div class="list" id="list"></div>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<script>
+function addShipment() {
+  let tracking = document.getElementById("tracking").value;
+  let location = document.getElementById("location").value;
+  let status = document.getElementById("status").value;
+  let eta = document.getElementById("eta").value;
 
-window.save = async function() {
-  let id = document.getElementById("id").value;
+  let shipments = JSON.parse(localStorage.getItem("shipments")) || {};
 
-  await setDoc(doc(db, "shipments", id), {
-    status: document.getElementById("status").value,
-    location: document.getElementById("location").value,
-    step: parseInt(document.getElementById("step").value)
-    ship id: document.getElementById("shipid").value,
-  });
+  shipments[tracking] = {
+    location: location,
+    status: status,
+    eta: eta
+  };
 
-  alert("Saved Successfully");
-};
+  localStorage.setItem("shipments", JSON.stringify(shipments));
+
+  alert("Shipment Added!");
+  displayShipments();
+}
+
+function displayShipments() {
+  let shipments = JSON.parse(localStorage.getItem("shipments")) || {};
+  let output = "";
+
+  for (let key in shipments) {
+    output += `<p><b>${key}</b> - ${shipments[key].status} (${shipments[key].location})</p>`;
+  }
+
+  document.getElementById("list").innerHTML = output;
+}
+
+displayShipments();
 </script>
 
 </body>
