@@ -1,68 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      padding: 20px;
-      background: #f4f6f9;
-    }
-
-    input {
-      padding: 10px;
-      width: 90%;
-      max-width: 300px;
-      margin: 5px;
-    }
-
-    button {
-      padding: 10px;
-      width: 95%;
-      max-width: 320px;
-      background: green;
-      color: white;
-      border: none;
-      margin-top: 10px;
-    }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin</title>
 </head>
 
 <body>
 
-<h2>Admin Panel</h2>
+<h2>Admin Login</h2>
 
-<input id="num" placeholder="Tracking Number"><br>
-<input id="status" placeholder="Status (e.g. In Transit)"><br>
-<input id="location" placeholder="Current Location"><br>
-<input id="eta" placeholder="Estimated Delivery"><br>
+<input id="email" placeholder="Email"><br>
+<input id="password" type="password" placeholder="Password"><br>
+<button onclick="login()">Login</button>
 
-<button onclick="save()">Save Shipment</button>
+<div id="panel" style="display:none;">
+  <h3>Add Shipment</h3>
 
-<p id="msg"></p>
+  <input id="num" placeholder="Tracking Number"><br>
+  <input id="status" placeholder="Status"><br>
+  <input id="location" placeholder="Location"><br>
+  <input id="eta" placeholder="ETA"><br>
 
-<script>
-function save() {
+  <button onclick="save()">Save</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBW0uYIwI_z2ihj2LtdmgXNV4B5dOf3TDk",
+  authDomain: "globalcourier-3ba34.firebaseapp.com",
+  projectId: "globalcourier-3ba34",
+  storageBucket: "globalcourier-3ba34.firebasestorage.app",
+  messagingSenderId: "827988291885",
+  appId: "1:827988291885:web:daa65d034e3773a57c63a4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+window.login = async function() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  await signInWithEmailAndPassword(auth, email, password);
+  document.getElementById("panel").style.display = "block";
+};
+
+window.save = async function() {
   let num = document.getElementById("num").value;
-  let status = document.getElementById("status").value;
-  let location = document.getElementById("location").value;
-  let eta = document.getElementById("eta").value;
 
-  let data = JSON.parse(localStorage.getItem("shipments")) || {};
+  await setDoc(doc(db, "shipments", num), {
+    status: document.getElementById("status").value,
+    location: document.getElementById("location").value,
+    eta: document.getElementById("eta").value
+  });
 
-  data[num] = {
-    status: status,
-    location: location,
-    eta: eta
-  };
-
-  localStorage.setItem("shipments", JSON.stringify(data));
-
-  document.getElementById("msg").innerHTML = "✅ Shipment Saved!";
-}
+  alert("Saved!");
+};
 </script>
 
 </body>
