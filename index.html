@@ -1,33 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin</title>
+<title>Global Express Courier</title>
+
+<style>
+body { font-family: Arial; text-align: center; background:#f4f6f9; }
+input, button { padding:12px; width:90%; max-width:300px; margin:5px; }
+button { background:#e67e22; color:white; border:none; }
+.result { margin-top:15px; }
+</style>
 </head>
 
 <body>
 
-<h2>Admin Login</h2>
+<h2>🌍 Global Express Courier</h2>
+<h3>Track Shipment</h3>
 
-<input id="email" placeholder="Email"><br>
-<input id="password" type="password" placeholder="Password"><br>
-<button onclick="login()">Login</button>
+<input id="track" placeholder="Enter Tracking Number">
+<button onclick="check()">Track</button>
 
-<div id="panel" style="display:none;">
-  <h3>Add Shipment</h3>
-
-  <input id="num" placeholder="Tracking Number"><br>
-  <input id="status" placeholder="Status"><br>
-  <input id="location" placeholder="Location"><br>
-  <input id="eta" placeholder="ETA"><br>
-
-  <button onclick="save()">Save</button>
-</div>
+<div class="result" id="result"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBW0uYIwI_z2ihj2LtdmgXNV4B5dOf3TDk",
@@ -40,26 +38,22 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-window.login = async function() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
+window.check = async function() {
+  let num = document.getElementById("track").value;
 
-  await signInWithEmailAndPassword(auth, email, password);
-  document.getElementById("panel").style.display = "block";
-};
+  const ref = doc(db, "shipments", num);
+  const snap = await getDoc(ref);
 
-window.save = async function() {
-  let num = document.getElementById("num").value;
-
-  await setDoc(doc(db, "shipments", num), {
-    status: document.getElementById("status").value,
-    location: document.getElementById("location").value,
-    eta: document.getElementById("eta").value
-  });
-
-  alert("Saved!");
+  if (snap.exists()) {
+    let data = snap.data();
+    document.getElementById("result").innerHTML =
+      "📦 Status: " + data.status + "<br>" +
+      "📍 Location: " + data.location + "<br>" +
+      "⏳ ETA: " + data.eta;
+  } else {
+    document.getElementById("result").innerHTML = "❌ Not Found";
+  }
 };
 </script>
 
