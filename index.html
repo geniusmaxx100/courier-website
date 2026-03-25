@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Global Express Courier</title>
+<title>GlobalCourier</title>
 
 <style>
 body { font-family: Arial; text-align: center; background:#f4f6f9; }
@@ -15,7 +15,7 @@ button { background:#e67e22; color:white; border:none; }
 
 <body>
 
-<h2>🌍 Globalcourier</h2>
+<h2> Globalcourier</h2>
 <h3>Track Shipment</h3>
 
 <input id="track" placeholder="Enter Tracking Number">
@@ -51,6 +51,7 @@ window.check = async function() {
       "📦 Status: " + data.status + "<br>" +
       "📍 Location: " + data.location + "<br>" +
       "⏳ ETA: " + data.eta;
+      " ship id " + data.code+ "<br>" 
   } else {
     document.getElementById("result").innerHTML = "❌ Not Found";
   }
