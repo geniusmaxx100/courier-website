@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Global Express Courier</title>
+<title>GlobalCourier</title>
 
 <style>
 body { margin:0; font-family:Arial; background:#f4f6f9; }
@@ -14,7 +14,18 @@ nav {
   color:white;
   padding:15px;
   display:flex;
+  align-items:center;
   justify-content:space-between;
+}
+
+.logo {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo img {
+  width:35px;
 }
 
 /* HERO */
@@ -30,28 +41,42 @@ nav {
   background:white;
   margin:-30px auto;
   padding:20px;
-  border-radius:10px;
+  border-radius:12px;
   width:90%;
   max-width:400px;
   text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 input, button {
   padding:12px;
   width:90%;
   margin:5px;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
 
 button {
   background:#e67e22;
   color:white;
   border:none;
+  cursor:pointer;
 }
 
-.result {
-  margin-top:15px;
-  background:#f9f9f9;
+/* TIMELINE */
+.timeline {
+  margin-top:20px;
+  text-align:left;
+}
+
+.step {
   padding:10px;
+  border-left:4px solid #ccc;
+  margin-bottom:10px;
+}
+
+.active {
+  border-color:green;
 }
 </style>
 </head>
@@ -59,17 +84,22 @@ button {
 <body>
 
 <nav>
-  <h3>🌍 Global Express</h3>
+  <div class="logo">
+    <img src="https://cdn-icons-png.flaticon.com/512/1048/1048315.png">
+    <h3>GlobalCourier</h3>
+  </div>
 </nav>
 
 <div class="hero">
-  <h1>Track Your Shipment</h1>
+  <h1>Track Your Shipment Worldwide</h1>
 </div>
 
 <div class="track-box">
   <input id="track" placeholder="Enter Tracking Number">
-  <button onclick="check()">Track</button>
-  <div class="result" id="result"></div>
+  <button onclick="track()">Track</button>
+
+  <div id="result"></div>
+  <div class="timeline" id="timeline"></div>
 </div>
 
 <script type="module">
@@ -88,20 +118,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.check = async function() {
+window.track = async function() {
   let num = document.getElementById("track").value;
-
   const ref = doc(db, "shipments", num);
   const snap = await getDoc(ref);
 
   if (snap.exists()) {
     let data = snap.data();
+
     document.getElementById("result").innerHTML =
-      "📦 " + data.status + "<br>" +
-      "📍 " + data.location + "<br>" +
-      "⏳ " + data.eta;
+      "📦 " + data.status + "<br>📍 " + data.location;
+
+    // TIMELINE
+    let steps = ["Order Received", "In Transit", "Arrived at Hub", "Out for Delivery", "Delivered"];
+    let html = "";
+
+    steps.forEach((step, index) => {
+      let active = index <= data.step ? "step active" : "step";
+      html += `<div class="${active}">${step}</div>`;
+    });
+
+    document.getElementById("timeline").innerHTML = html;
+
   } else {
-    document.getElementById("result").innerHTML = "❌ Not Found";
+    document.getElementById("result").innerHTML = "❌ Tracking Number Not Found";
   }
 };
 </script>
