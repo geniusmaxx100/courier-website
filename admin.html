@@ -46,8 +46,8 @@ window.login = async function() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
-await signInWithEmailAndPassword(auth, email, password);
-window.location.href = "admin.html#dashboard";
+  await signInWithEmailAndPassword(auth, email, password);
+  document.getElementById("panel").style.display = "block";
 };
 
 window.save = async function() {
@@ -61,9 +61,6 @@ window.save = async function() {
 
   alert("Saved!");
 };
-  if (window.location.hash === "#dashboard") {
-  document.getElementById("panel").style.display = "block";
-}
 </script>
 
 </body>
